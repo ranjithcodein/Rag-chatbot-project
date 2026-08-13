@@ -29,9 +29,24 @@ import pymysql
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceInferenceAPIEmbeddings
 from langchain_groq import ChatGroq
 from langchain_community.vectorstores import Chroma
+
+import requests
+
+class SimpleHFEmbeddings:
+    def __init__(self, api_key, model_name="sentence-transformers/all-MiniLM-L6-v2"):
+        self.api_key = api_key
+        self.url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_name}"
+
+    def embed_documents(self, texts):
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+        response = requests.post(self.url, headers=headers, json={"inputs": texts})
+        return response.json()
+
+    def embed_query(self, text):
+        return self.embed_documents([text])[0]
+
 
 # ---------- App setup ----------
 
@@ -47,10 +62,7 @@ CHROMA_PERSIST_DIR = "chroma_store"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CHROMA_PERSIST_DIR, exist_ok=True)
 
-embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=os.environ.get("HF_API_TOKEN"),
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
+embeddings = SimpleHFEmbeddings(api_key=os.environ.get("HF_API_TOKEN"))
 llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.2, groq_api_key=os.environ.get("GROQ_API_KEY"))
 
 

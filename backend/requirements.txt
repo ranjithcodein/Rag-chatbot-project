@@ -3,12 +3,11 @@ flask-cors
 flask-jwt-extended
 pymysql
 werkzeug
-langchain
 langchain-text-splitters
-langchain-openai
 langchain-community
+langchain-groq
 chromadb
 pypdf
-langchain-huggingface
-langchain-groq
-sentence-transformers
+python-dotenv
+requests
+gunicorn
