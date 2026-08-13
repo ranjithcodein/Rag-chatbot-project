@@ -1,0 +1,11 @@
+flask
+flask-cors
+flask-jwt-extended
+pymysql
+werkzeug
+langchain
+langchain-text-splitters
+langchain-openai
+langchain-community
+chromadb
+pypdf
