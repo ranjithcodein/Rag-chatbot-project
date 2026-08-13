@@ -9,3 +9,6 @@ langchain-openai
 langchain-community
 chromadb
 pypdf
+langchain-huggingface
+langchain-groq
+sentence-transformers
