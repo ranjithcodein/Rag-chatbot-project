@@ -29,7 +29,7 @@ import pymysql
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceInferenceAPIEmbeddings
 from langchain_groq import ChatGroq
 from langchain_community.vectorstores import Chroma
 
@@ -47,7 +47,10 @@ CHROMA_PERSIST_DIR = "chroma_store"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CHROMA_PERSIST_DIR, exist_ok=True)
 
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+embeddings = HuggingFaceInferenceAPIEmbeddings(
+    api_key=os.environ.get("HF_API_TOKEN"),
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
 llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.2, groq_api_key=os.environ.get("GROQ_API_KEY"))
 
 
